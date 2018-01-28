@@ -14,10 +14,10 @@ const long period = (long) 1000000 / fps;
 void draw(byte x_pos, byte y_pos) {
   analogWrite(x, x_pos);
   analogWrite(y, y_pos);
-//  Serial.print(x_pos);
-//  Serial.print("\t");
-//  Serial.print(y_pos);
-//  Serial.println("");
+  Serial.print(x_pos);
+  Serial.print("\t");
+  Serial.print(y_pos);
+  Serial.println("");
   }
 
 void buzz() {
@@ -32,20 +32,32 @@ void buzzball() {
 
   byte ball_radius = 5;
 
-  if (random(2)) {
-    ball_x_pos = ball_x_pos + 1;
-  } else {
-    ball_x_pos = ball_x_pos - 1;
-  }
-
-  if (random(2)) {
-    ball_y_pos = ball_y_pos + 1;
-  } else {
-    ball_y_pos = ball_y_pos - 1;
-  }
+  switch (random(4)) {
+    case 0:
+      ball_x_pos += 1;
+      ball_y_pos += 1;
+      break;
+    case 1:
+      ball_x_pos += 1;
+      ball_y_pos -= 1;
+      break;
+    case 2:
+      ball_x_pos -= 1;
+      ball_y_pos += 1;
+      break;
+    case 3:
+      ball_x_pos -= 1;
+      ball_y_pos -= 1;
+      break;
+    }
 
   byte x_pos = random(ball_x_pos - ball_radius, ball_x_pos + ball_radius);
-  byte y_pos = ball_y_pos + (byte) sqrt(sq(ball_radius) - sq(x_pos));
+
+  byte mag = (byte) sqrt(abs(sq(ball_radius) - sq(x_pos)));
+  byte y_max = mag - ball_y_pos;
+  byte y_min = -mag - ball_y_pos;
+
+  byte y_pos = random(y_min, y_max + 1);
 
   draw(x_pos, y_pos);
   }
@@ -54,7 +66,7 @@ Task draw_task(period, -1, buzzball);
 Scheduler task_scheduler;
  
 void setup() {
-//  Serial.begin(9600);
+  Serial.begin(9600);
   task_scheduler.addTask(draw_task);
   draw_task.enable();
 }
