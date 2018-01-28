@@ -7,7 +7,7 @@ short x = 6;
 byte x_max = 255;
 byte y_max = 255;
 
-const int fps = 60;
+const int fps = 200;
 const long period = (long) 1000000 / fps;
 
 
@@ -76,7 +76,24 @@ void cycle() {
   
   }
 
-Task draw_task(period, -1, buzz);
+void circle() {
+  const float pi = 3.142;
+  const byte x0 = 125;
+  const byte y0 = 125;
+  const byte radius = 100;
+  static byte phase;
+
+  phase += 10;
+
+  float theta  = 2 * pi * ((float) phase / 255);
+  byte x_pos = x0 + (radius * sin(theta));
+  byte y_pos = y0 + (radius * cos(theta));
+
+  draw(x_pos, y_pos);
+  
+  }
+
+Task draw_task(period, -1, circle);
 Scheduler task_scheduler;
  
 void setup() {
