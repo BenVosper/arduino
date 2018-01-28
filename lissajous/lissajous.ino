@@ -30,9 +30,9 @@ void buzzball() {
   static byte ball_x_pos;
   static byte ball_y_pos;
 
-  byte ball_radius = 5;
+  byte ball_radius = 10;
 
-  switch (random(4)) {
+  switch (random(0, 4)) {
     case 0:
       ball_x_pos += 1;
       ball_y_pos += 1;
@@ -51,18 +51,32 @@ void buzzball() {
       break;
     }
 
-  byte x_pos = random(ball_x_pos - ball_radius, ball_x_pos + ball_radius);
-
-  byte mag = (byte) sqrt(abs(sq(ball_radius) - sq(x_pos)));
-  byte y_max = mag - ball_y_pos;
-  byte y_min = -mag - ball_y_pos;
-
-  byte y_pos = random(y_min, y_max + 1);
-
+  byte x_pos = random(ball_x_pos - ball_radius, ball_x_pos + ball_radius + 1);
+  byte y_pos = random(ball_y_pos - ball_radius, ball_y_pos + ball_radius + 1);
   draw(x_pos, y_pos);
   }
 
-Task draw_task(period, -1, buzzball);
+void cycle() {
+  static short x_pos;
+  static short y_pos;
+
+  const byte step = 100;
+
+  x_pos += step;
+
+  if (x_pos > 255) {
+    x_pos = 0;
+    y_pos += step;
+    if (y_pos > 255) {
+      y_pos = 0;
+      }
+    }
+
+  draw(x_pos, y_pos);
+  
+  }
+
+Task draw_task(period, -1, buzz);
 Scheduler task_scheduler;
  
 void setup() {
