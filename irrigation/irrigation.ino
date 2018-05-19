@@ -2,15 +2,16 @@
 
 // ~~~~~~~~~~~~ SETUP ~~~~~~~~~~~~~
 
-const int PUMP_RELAY_PIN = 1;
-const int PUMP_OVERRIDE_PIN = 2;
+const int POWER_LED_PIN = 9;
+const int PUMP_RELAY_PIN = 8;
+const int PUMP_OVERRIDE_PIN = 7;
 const int TANK_LEVEL_PIN = A0;
 
 const int INTERVAL_HOURS = 6;
 const int PUMP_DURATION_MINS = 5;
 
 const int LOW_POWER_SECS = 8;
-const int EMPTY_TANK = 0;
+const int EMPTY_TANK = 500;
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -22,9 +23,11 @@ const int interval_sleeps = interval_seconds / LOW_POWER_SECS;
 int sleeps_remaining = interval_sleeps;
 
 void setup() {
+  pinMode(POWER_LED_PIN, OUTPUT);
   pinMode(PUMP_RELAY_PIN, OUTPUT);
   pinMode(PUMP_OVERRIDE_PIN, INPUT);
-  digitalWrite(PUMP_RELAY_PIN, LOW);
+  digitalWrite(PUMP_RELAY_PIN, HIGH);
+  digitalWrite(POWER_LED_PIN, HIGH);
 }
 
 
@@ -40,9 +43,9 @@ void low_power(int seconds) {
 
 void pump() {
   if (analogRead(TANK_LEVEL_PIN) > EMPTY_TANK) {
-    digitalWrite(PUMP_RELAY_PIN, HIGH);
-    low_power(pump_duration_seconds);
     digitalWrite(PUMP_RELAY_PIN, LOW);
+    low_power(pump_duration_seconds);
+    digitalWrite(PUMP_RELAY_PIN, HIGH);
   }
 }
 
@@ -50,10 +53,10 @@ void loop() {
 
   switch (digitalRead(PUMP_OVERRIDE_PIN)) {
     case HIGH:
-      digitalWrite(PUMP_RELAY_PIN, HIGH);
+      digitalWrite(PUMP_RELAY_PIN, LOW);
       break;
     case LOW:
-      digitalWrite(PUMP_RELAY_PIN, LOW);
+      digitalWrite(PUMP_RELAY_PIN, HIGH);
     default:
       if (sleeps_remaining <= 0) {
         pump();
