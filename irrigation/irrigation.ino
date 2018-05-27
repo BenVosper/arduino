@@ -8,7 +8,7 @@ const int PUMP_OVERRIDE_PIN = 7;
 const int TANK_LEVEL_PIN = A0;
 
 const int INTERVAL_HOURS = 6;
-const int PUMP_DURATION_MINS = 5;
+const int PUMP_DURATION_MINS = 1;
 
 const int LOW_POWER_SECS = 8;
 const int EMPTY_TANK = 500;
