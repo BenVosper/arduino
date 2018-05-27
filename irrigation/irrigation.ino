@@ -25,10 +25,12 @@ int sleeps_remaining = interval_sleeps;
 void setup() {
   pinMode(POWER_LED_PIN, OUTPUT);
   pinMode(PUMP_RELAY_PIN, OUTPUT);
-  pinMode(PUMP_OVERRIDE_PIN, INPUT);
+  pinMode(PUMP_OVERRIDE_PIN, INPUT_PULLUP);
   digitalWrite(PUMP_RELAY_PIN, HIGH);
   digitalWrite(POWER_LED_PIN, HIGH);
 }
+
+
 
 
 void low_power(int seconds) {
