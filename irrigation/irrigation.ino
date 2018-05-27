@@ -53,19 +53,15 @@ void pump() {
 
 void loop() {
 
-  switch (digitalRead(PUMP_OVERRIDE_PIN)) {
-    case HIGH:
-      digitalWrite(PUMP_RELAY_PIN, LOW);
-      break;
-    case LOW:
-      digitalWrite(PUMP_RELAY_PIN, HIGH);
-    default:
-      if (sleeps_remaining <= 0) {
-        pump();
-        sleeps_remaining = interval_sleeps;
-      } else {
-        LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF);
-        sleeps_remaining --;
-      }
-  }  
+  if (digitalRead(PUMP_OVERRIDE_PIN) == LOW) {
+    digitalWrite(PUMP_RELAY_PIN, LOW);
+  } else {
+    digitalWrite(PUMP_RELAY_PIN, HIGH);
+    if (sleeps_remaining <= 0) {
+      pump();
+      sleeps_remaining = interval_sleeps;
+    }
+  }
+  LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF);
+  sleeps_remaining --;
 }
