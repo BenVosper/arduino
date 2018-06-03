@@ -8,7 +8,7 @@ const int PUMP_OVERRIDE_PIN = 7;
 const int TANK_LEVEL_PIN = A0;
 
 const int INTERVAL_HOURS = 6;
-const int PUMP_DURATION_MINS = 1;
+const int PUMP_DURATION_SECONDS = 32;
 
 const int LOW_POWER_SECS = 8;
 
@@ -16,7 +16,6 @@ const int LOW_POWER_SECS = 8;
 
 
 const int interval_seconds = INTERVAL_HOURS * 3600;
-const int pump_duration_seconds = PUMP_DURATION_MINS * 60;
 
 const int interval_sleeps = interval_seconds / LOW_POWER_SECS;
 int sleeps_remaining = interval_sleeps;
@@ -48,7 +47,7 @@ void low_power(int seconds) {
 void pump() {
   if (can_pump()) {
     digitalWrite(PUMP_RELAY_PIN, LOW);
-    low_power(pump_duration_seconds);
+    low_power(PUMP_DURATION_SECONDS);
     digitalWrite(PUMP_RELAY_PIN, HIGH);
   }
 }
