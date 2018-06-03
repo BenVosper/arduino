@@ -30,7 +30,9 @@ void setup() {
   digitalWrite(POWER_LED_PIN, HIGH);
 }
 
-
+bool can_pump() {
+  return digitalRead(TANK_LEVEL_PIN) == LOW;
+}
 
 
 void low_power(int seconds) {
@@ -44,7 +46,7 @@ void low_power(int seconds) {
 
 
 void pump() {
-  if (digitalRead(TANK_LEVEL_PIN) == LOW) {
+  if (can_pump()) {
     digitalWrite(PUMP_RELAY_PIN, LOW);
     low_power(pump_duration_seconds);
     digitalWrite(PUMP_RELAY_PIN, HIGH);
@@ -53,7 +55,7 @@ void pump() {
 
 void loop() {
 
-  if (digitalRead(PUMP_OVERRIDE_PIN) == LOW) {
+  if ((digitalRead(PUMP_OVERRIDE_PIN) == LOW) and can_pump()) {
     digitalWrite(PUMP_RELAY_PIN, LOW);
   } else {
     digitalWrite(PUMP_RELAY_PIN, HIGH);
