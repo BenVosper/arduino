@@ -11,7 +11,6 @@ const int INTERVAL_HOURS = 6;
 const int PUMP_DURATION_MINS = 1;
 
 const int LOW_POWER_SECS = 8;
-const int EMPTY_TANK = 500;
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -26,6 +25,7 @@ void setup() {
   pinMode(POWER_LED_PIN, OUTPUT);
   pinMode(PUMP_RELAY_PIN, OUTPUT);
   pinMode(PUMP_OVERRIDE_PIN, INPUT_PULLUP);
+  pinMode(TANK_LEVEL_PIN, INPUT_PULLUP);
   digitalWrite(PUMP_RELAY_PIN, HIGH);
   digitalWrite(POWER_LED_PIN, HIGH);
 }
@@ -44,7 +44,7 @@ void low_power(int seconds) {
 
 
 void pump() {
-  if (analogRead(TANK_LEVEL_PIN) > EMPTY_TANK) {
+  if (digitalRead(TANK_LEVEL_PIN) == LOW) {
     digitalWrite(PUMP_RELAY_PIN, LOW);
     low_power(pump_duration_seconds);
     digitalWrite(PUMP_RELAY_PIN, HIGH);
