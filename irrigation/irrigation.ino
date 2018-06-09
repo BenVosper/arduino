@@ -30,7 +30,7 @@ void setup() {
 }
 
 bool can_pump() {
-  return digitalRead(TANK_LEVEL_PIN) == LOW;
+  return digitalRead(TANK_LEVEL_PIN) == HIGH;
 }
 
 
